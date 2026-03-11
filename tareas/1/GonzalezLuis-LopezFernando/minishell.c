@@ -55,7 +55,7 @@ void minishell(){
     // Ciclo donde vive la terminal
     while (1){
         // (1) Imprime el prompt
-        printf("minishell");
+        printf("minishell> ");
         fflush(stdout);
 
         // (2) leer linea usuario
@@ -79,6 +79,10 @@ void minishell(){
         }
         // Es importante el NULL, porque execvp espera un array con el último elemento en NULL
         parametros[i_parametros] = NULL;
+
+        //Evita que el codigo muera cuando se entrege una cadena vacia ("enter")
+        if (parametros[0] == NULL) continue;
+
         int tam_comando = strlen(parametros[0]);
         char comando[tam_comando+1];
         strcpy(comando, parametros[0]);
@@ -108,7 +112,7 @@ void minishell(){
                 //SIG_DFL: es la acción definida de la señal
                 sa.sa_handler = SIG_DFL;
                 sigemptyset(&sa.sa_mask);
-                sa.sa_flags = 0;
+                sa.sa_flags = SA_RESTART;
                 
                 sigaction(SIGINT, &sa, NULL);
 
@@ -117,6 +121,8 @@ void minishell(){
                 _exit(1);
             }else{ // pid del padre
                 //printf("Soy el proceso padre, %i. Mi PID es: %i \n", nvo_pid, pid);
+                // El padre espera a que el hijo termine
+                waitpid(nvo_pid, NULL, 0);
                 
             }
         }
