@@ -4,6 +4,21 @@ import time
 import random
 import curses
 
+# ¡Ojo!
+#
+# El código para el manejo de despliegue a la interfaz textual (TUI)
+# mediante Curses está... No feo... Lo que le sigue 🙁 Y eso siempre me
+# llena de vergüenza. Pero como les dije en clase, no es algo que
+# acostumbro hacer, y lo incluyo tal cual se los pude hacer ver en vivo.
+#
+# Si fuera a hacerlo con un poquito más de tiempo, separaría todas las
+# llamadas a window.addstr() y window.refresh() hacia una función
+# aparte. Además, aseguraría un tiempo mínimo de despliegue (p.ej. para el
+# mensaje que presenta de forma _brevísima_ el jefe...
+#
+# Pero bueno... Espero que les sirva por lo menos de motivación — ¡para ser
+# mejores que yo! 😉
+
 NUM_TRABAJADORES = 5
 sem_trab = [threading.Semaphore(0) for i in range(NUM_TRABAJADORES)]
 solicitudes = []
