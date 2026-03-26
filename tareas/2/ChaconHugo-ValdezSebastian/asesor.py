@@ -13,7 +13,7 @@ asesor_disponible = threading.Semaphore(0)
 def asesor():
     global sillas_disponibles
     while True:
-        print("Asesor: no hay alumnos, me duermo 😴")
+        print("Asesor: no hay alumnos, me duermo ")
         alumnos_esperando.acquire()  # espera a que llegue alguien
 
         mutex.acquire()
@@ -35,24 +35,27 @@ def alumno(id):
         mutex.acquire()
         if sillas_disponibles > 0:
             sillas_disponibles -= 1
+            print(f"Alumno {id}: se sienta. Sillas libres: {sillas_disponibles}")
 
-        else:
-            print(f"Alumno {id}: no hay sillas, se va")
+            alumnos_esperando.release()
             mutex.release()
 
+            asesor_disponible.acquire()
+            print(f"Alumno {id}: está siendo atendido")
+
+        else:
+            print(f"Alumno {id}: no hay sillas, se va ")
+            mutex.release()
+
+
 # Crear hilos
+threading.Thread(target=asesor, daemon=True).start()
 
 for i in range(5):
+    threading.Thread(target=alumno, args=(i,), daemon=True).start()
 
 
 # Mantener vivo
 while True:
-    time.sleep(1)    threading.Thread(target=alumno, args=(i,), daemon=True).start()
-threading.Thread(target=asesor, daemon=True).start()
-
-
-            print(f"Alumno {id}: está siendo atendido")
-            asesor_disponible.acquire()
-            mutex.release()
-            alumnos_esperando.release()
+    time.sleep(1)
 
