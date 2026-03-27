@@ -10,6 +10,10 @@ ejecutar programas del sistema, manejando correctamente la creación de
 procesos mediante `fork()`, la ejecución de programas con `exec()` y la
 recolección de procesos hijos con señales (`SIGCHLD`).
 
+## **¡Revisión lista!**
+
+Pueden ver ya los [resultados de la revisión de la tarea](./revision.org).
+
 ---
 
 ### **Especificaciones funcionales**
